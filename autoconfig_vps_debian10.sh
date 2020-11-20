@@ -296,7 +296,7 @@ echo 'Please send in your comments and/or suggestions to zaf@vsnl.com'
 cd /usr/bin
 wget -O menu "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/menu.sh"
 wget -O user-add "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/useradd.sh"
-wget -O trial "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/trial.sh"
+wget -O trial "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/trial.sh"
 wget -O user-login "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userlogin.sh"
 wget -O user-list "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userlist.sh"
 wget -O fix "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/fix.sh"
