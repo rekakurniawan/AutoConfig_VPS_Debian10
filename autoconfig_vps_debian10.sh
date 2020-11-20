@@ -302,8 +302,8 @@ wget -O user-list "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VP
 wget -O fix "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/fix.sh"
 wget -O speedtest "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/speedtest_cli.py"
 wget -O info "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/info.sh"
-wget -O user-del "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userdel.html"
-wget -O user-lock "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-lock.html"
+wget -O user-del "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userdel.sh"
+wget -O user-lock "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-lock.sh"
 wget -O user-expire "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userexpire.sh"
 
 chmod +x menu
