@@ -238,7 +238,6 @@ chmod +x /usr/bin/build
 chmod +x /etc/rc.local
 
 # Custom Banner SSH
-wget -O /etc/issue.net "https://gitlab.com/presult77/autoscript/-/raw/master/redssh.net"
 cat > /etc/issue.net <<-END
 <br>
 <br>
@@ -295,17 +294,17 @@ echo 'Please send in your comments and/or suggestions to zaf@vsnl.com'
 
 # download script
 cd /usr/bin
-wget -O menu "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/menu.sh"
-wget -O user-add "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/useradd.sh"
+wget -O menu "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/menu.sh"
+wget -O user-add "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/useradd.sh"
 wget -O trial "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/trial.sh"
-wget -O user-login "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/userlogin.sh"
-wget -O user-list "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/userlist.sh"
-wget -O fix "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/fix.sh"
+wget -O user-login "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userlogin.sh"
+wget -O user-list "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userlist.sh"
+wget -O fix "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/fix.sh"
 wget -O speedtest "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/speedtest_cli.py"
-wget -O info "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/info.sh"
-wget -O user-del "https://gitlab.com/presult77/autoscript/raw/master/userdel.html"
-wget -O user-lock "https://gitlab.com/presult77/autoscript/raw/master/user-lock.html"
-wget -O user-expire "https://gitlab.com/presult77/autoscript/-/raw/master/debian10/userexpire.sh"
+wget -O info "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/info.sh"
+wget -O user-del "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userdel.html"
+wget -O user-lock "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-lock.html"
+wget -O user-expire "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userexpire.sh"
 
 chmod +x menu
 chmod +x user-add
