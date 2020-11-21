@@ -60,6 +60,16 @@ chmod +x /etc/rc.local
 systemctl enable rc-local
 systemctl start rc-local.service
 
+# install webserver
+apt-get -y install nginx
+
+# disable exim
+service exim4 stop
+sysv-rc-conf exim4 off
+
+# update apt-file
+apt-file update
+
 echo "=================  install neofetch  ===================="
 echo "========================================================="
 # install neofetch
@@ -84,6 +94,190 @@ echo "neofetch" >> .bashrc
 
 # update
 apt-get -y update
+
+# install webserver
+cd
+rm /etc/nginx/sites-enabled/default
+rm /etc/nginx/sites-available/default
+cat > /etc/nginx/nginx.conf <<-END
+user       www www;  ## Default: nobody
+worker_processes  1;  ## Default: 1
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    gzip  on;
+	gzip_vary on;
+	gzip_comp_level 5;
+	gzip_types    text/plain application/x-javascript text/xml text/css;
+
+	autoindex on;
+	sendfile on;
+	tcp_nopush on;
+	tcp_nodelay on;
+	keepalive_timeout 65;
+	types_hash_max_size 2048;
+	server_tokens off;
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+	access_log /var/log/nginx/access.log;
+	error_log /var/log/nginx/error.log;
+	client_max_body_size 32M;
+	client_header_buffer_size 8m;
+	large_client_header_buffers 8 8m;
+
+	fastcgi_buffer_size 8m;
+	fastcgi_buffers 8 8m;
+
+	fastcgi_read_timeout 600;
+
+	set_real_ip_from 204.93.240.0/24;
+	set_real_ip_from 204.93.177.0/24;
+	set_real_ip_from 199.27.128.0/21;
+	set_real_ip_from 173.245.48.0/20;
+	set_real_ip_from 103.21.244.0/22;
+	set_real_ip_from 103.22.200.0/22;
+	set_real_ip_from 103.31.4.0/22;
+	set_real_ip_from 141.101.64.0/18;
+	set_real_ip_from 108.162.192.0/18;
+	set_real_ip_from 190.93.240.0/20;
+	set_real_ip_from 188.114.96.0/20;
+	set_real_ip_from 197.234.240.0/22;
+	set_real_ip_from 198.41.128.0/17;
+	real_ip_header     CF-Connecting-IP;
+	
+    server {
+        listen       81;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
+
+
+    # another virtual host using mix of IP-, name-, and port-based configuration
+    #
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+}
+END
+mkdir -p /home/vps/public_html
+echo "<pre>Welcome to Skyla Server</pre>" > /home/vps/public_html/index.html
+cat > /etc/nginx/conf.d/vps.conf <<-END
+server {
+  listen       81;
+  server_name  127.0.0.1 localhost;
+  access_log /var/log/nginx/vps-access.log;
+  error_log /var/log/nginx/vps-error.log error;
+  root   /home/vps/public_html;
+
+  location / {
+    index  index.html index.htm index.php;
+    try_files $uri $uri/ /index.php?$args;
+  }
+
+  location ~ \.php$ {
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass  127.0.0.1:9000;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  }
+}
+service nginx restart
+END
 
 # set repo webmin
 sh -c 'echo "deb http://download.webmin.com/download/repository sarge contrib" > /etc/apt/sources.list.d/webmin.list'
@@ -295,16 +489,16 @@ echo 'Please send in your comments and/or suggestions to zaf@vsnl.com'
 # download script
 cd /usr/bin
 wget -O menu "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/menu.sh"
-wget -O user-add "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/useradd.sh"
+wget -O user-add "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-add.sh"
 wget -O trial "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/trial.sh"
-wget -O user-login "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userlogin.sh"
-wget -O user-list "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userlist.sh"
+wget -O user-login "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-login.sh"
+wget -O user-list "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-list.sh"
 wget -O fix "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/fix.sh"
 wget -O speedtest "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/speedtest_cli.py"
 wget -O info "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/info.sh"
-wget -O user-del "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userdel.sh"
+wget -O user-del "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-del.sh"
 wget -O user-lock "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-lock.sh"
-wget -O user-expire "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/userexpire.sh"
+wget -O user-expire "https://raw.githubusercontent.com/rekakurniawan/AutoConfig_VPS_Debian10/main/user-expire.sh"
 
 chmod +x menu
 chmod +x user-add
