@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 
-# initialisasi var
+# Var Initializing
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
 MYIP=$(wget -qO- ipv4.icanhazip.com);
@@ -10,22 +10,22 @@ MYIP2="s/xxxxxxxxx/$MYIP/g";
 country=ID
 state=DKIJakarta
 locality=JakartaPusat
-organization=Arkadia Inc
+organization=Arkadia
 organizationalunit=Skyla
 commonname=skyla.id
-email=-
+email=admin@skyla.id
 
-# go to root
+# Go to Root
 cd
 
-# disable ipv6
+# Disabling IPv6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
 
-# set time GMT +7 jakarta
+# Set Timezone
 ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-# set locale
+# Set Locale
 sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
 /etc/init.d/ssh restart
 
@@ -95,6 +95,7 @@ echo "neofetch" >> .bashrc
 # update
 apt-get -y update
 
+: '
 # install webserver
 cd
 rm /etc/nginx/sites-enabled/default
@@ -278,6 +279,7 @@ server {
 }
 service nginx restart
 END
+'
 
 # set repo webmin
 sh -c 'echo "deb http://download.webmin.com/download/repository sarge contrib" > /etc/apt/sources.list.d/webmin.list'
